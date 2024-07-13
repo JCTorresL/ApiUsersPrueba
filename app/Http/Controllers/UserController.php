@@ -14,9 +14,11 @@ use function PHPUnit\Framework\isEmpty;
 
 class UserController extends Controller
 {
-    public function getUsers(){
+    public function getUsers(Request $request){
         try {
-            $users = User::paginate(5);
+            $users = User::where('nombre', 'LIKE', '%' . $request->busqueda . '%')
+                ->orWhere('ciudad', 'LIKE', '%' . $request->busqueda . '%')
+                ->paginate(5);
             $message = 'success';
 
             if(empty($users)){
@@ -34,7 +36,6 @@ class UserController extends Controller
         }
 
     }
-
 
     public function getUser($id){
         try {
